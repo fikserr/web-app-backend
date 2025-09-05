@@ -27,10 +27,11 @@ class OneCController extends Controller
 
     public function products(Request $request)
     {
+
         $categoryId = $request->get('categoryId');
         $page       = $request->get('page', 1);
         $pageSize   = $request->get('pageSize', 10);
-
+        // dd($categoryId, $page, $pageSize);
         return response()->json($this->oneC->getProducts($categoryId, $page, $pageSize));
     }
 }

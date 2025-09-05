@@ -19,12 +19,13 @@ class OneCService
                 'pageSize' => $pageSize,
                 'userId' => $this->userId
             ]);
-                dd($response->json());
+
         return $response->json();
     }
 
-    public function getProducts($categoryId, $page = 1, $pageSize = 10)
+    public function getProducts($categoryId, $page, $pageSize )
     {
+      
         $response = Http::withBasicAuth($this->username, $this->password)
             ->get($this->baseUrl . 'product', [
                 'page' => $page,

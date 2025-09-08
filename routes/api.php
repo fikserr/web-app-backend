@@ -8,6 +8,6 @@ Route::get('/ping', fn() => response()->json(['ok' => true]));
 
 Route::get('/categories', [OneCController::class, 'categories']);
 Route::get('/products', [OneCController::class, 'products']);
-Route::post('/telegram/save-user', [TelegramController::class, 'saveUser']);
+Route::post('/telegram/check', [TelegramController::class, 'checkTelegram']);
 
 

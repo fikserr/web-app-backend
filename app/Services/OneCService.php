@@ -1,38 +1,44 @@
 <?php
-
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 
 class OneCService
 {
-    protected $baseUrl = 'https://server.shopick.uz/WEB_PROSYS/hs/web.app/';
+    protected $baseUrl  = 'https://server.shopick.uz/WEB_PROSYS/hs/web.app/';
     protected $username = 'Direktor';
     protected $password = '1122';
-    protected $userId = 1147407714;
+    protected $userId   = 1147407714;
 
     public function getCategories($page = 1, $pageSize = 10)
     {
         $response = Http::withBasicAuth($this->username, $this->password)
             ->get($this->baseUrl . 'category', [
-                'page' => $page,
+                'page'     => $page,
                 'pageSize' => $pageSize,
-                'userId' => $this->userId
+                'userId'   => $this->userId,
             ]);
 
         return $response->json();
     }
 
-    public function getProducts($categoryId, $page, $pageSize )
+    public function getProducts($categoryId, $page, $pageSize)
     {
-      
         $response = Http::withBasicAuth($this->username, $this->password)
             ->get($this->baseUrl . 'product', [
-                'page' => $page,
-                'pageSize' => $pageSize,
-                'userId' => $this->userId,
-                'categoryId' => $categoryId
+                'page'       => $page,
+                'pageSize'   => $pageSize,
+                'userId'     => $this->userId,
+                'categoryId' => $categoryId,
             ]);
+
+        return $response->json();
+    }
+
+    public function createOrder(array $orderData)
+    {
+        $response = Http::withBasicAuth($this->username, $this->password)
+            ->post($this->baseUrl . 'order', $orderData);
 
         return $response->json();
     }

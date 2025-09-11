@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Events\BasketUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use Illuminate\Http\Request;
@@ -26,11 +27,11 @@ class BasketController extends Controller
             'user_id'    => 'required|string',
             'product_id' => 'required|string',
             'measure_id' => 'required|string',
-            'action'    => 'nullable|in:plus,minus',
-            'quantity'  => 'nullable|integer|min:0',
-            'price'     => 'required|numeric|min:0',
-            'name'      => 'required|string',
-            'image'     => 'required|string',
+            'action'     => 'nullable|in:plus,minus',
+            'quantity'   => 'nullable|integer|min:0',
+            'price'      => 'required|numeric|min:0',
+            'name'       => 'required|string',
+            'image'      => 'nullable|string',
         ]);
 
         $item = Basket::where('user_id', $data['user_id'])
@@ -50,7 +51,7 @@ class BasketController extends Controller
                     'quantity'   => $qty,
                     'price'      => $data['price'],
                     'name'       => 'required|string',
-                    'image'      => 'required|string',
+                    'image'      => 'nullable|string',
                 ]);
             } elseif ($item) {
                 if ($qty <= 0) {
@@ -79,7 +80,7 @@ class BasketController extends Controller
                     'quantity'   => 1,
                     'price'      => $data['price'],
                     'name'       => $data['name'],
-                    'image'      => $data['image'],
+                    'image'      => $data['image'] ?? null,
                 ]);
 
                 Log::debug('Basket created (plus)', $data);
@@ -97,7 +98,9 @@ class BasketController extends Controller
             $item->image = $data['image'];
             $item->save();
 
-            Log::debug('Basket incremented', $data);
+            // ✅ plus bo‘lganda
+            broadcast(new BasketUpdated($item, $data['user_id']))->toOthers();
+
             return response()->json(['ok' => true, 'item' => $item]);
         }
 
@@ -105,15 +108,20 @@ class BasketController extends Controller
             $item->quantity -= 1;
             if ($item->quantity <= 0) {
                 $item->delete();
-                Log::debug('Basket removed (quantity <= 0)', $data);
+
+                // ✅ minusda quantity 0 bo‘lsa
+                broadcast(new BasketUpdated(null, $data['user_id']))->toOthers();
                 return response()->json(['ok' => true, 'message' => 'Tovar basketdan o‘chirildi', 'removed' => true]);
             }
+
             $item->price = $data['price'];
             $item->name  = $data['name'];
             $item->image = $data['image'];
             $item->save();
 
-            Log::debug('Basket decremented', $data);
+            // ✅ minus bo‘lganda (lekin hali mavjud bo‘lsa)
+            broadcast(new BasketUpdated($item, $data['user_id']))->toOthers();
+
             return response()->json(['ok' => true, 'item' => $item]);
         }
 

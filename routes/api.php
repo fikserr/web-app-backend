@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\OneCController;
-use App\Http\Controllers\Api\OrderController;
+
 use App\Http\Controllers\Api\TelegramController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', fn() => response()->json(['ok' => true]));

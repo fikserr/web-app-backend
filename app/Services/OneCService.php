@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Http;
 
 class OneCService
 {
-    protected $baseUrl  = 'https://server.shopick.uz/WEB_PROSYS/hs/web.app/';
+    protected $baseUrl  = 'https://ssglink.uz/UNIVERSAL_ORIGINAL/hs/web.app/';
     protected $username = 'Direktor';
     protected $password = '1122';
     protected $userId   = 1147407714;

@@ -1,7 +1,7 @@
 <?php
 
 return [
-'paths' => ['api/*', 'sanctum/csrf-cookie'],
+'paths' => ['api/*','orders', 'sanctum/csrf-cookie'],
 'allowed_methods' => ['*'],
 'allowed_origins' => ['http://localhost:5173','https://web-app-frontend-bice.vercel.app/'],
 'allowed_origins_patterns' => [],

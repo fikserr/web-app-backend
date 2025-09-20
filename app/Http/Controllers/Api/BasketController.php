@@ -136,6 +136,7 @@ class BasketController extends Controller
         $products = $basket->map(function ($item) {
             return [
                 'basket_id'  => $item->id,
+                'measure_id' => $item->measure_id,
                 'product_id' => $item->product_id,
                 'quantity'   => $item->quantity,
                 'price'      => $item->price,

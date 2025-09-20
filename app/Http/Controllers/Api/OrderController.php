@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Services\OneCService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -16,6 +18,12 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        // 1️⃣ Request loglash
+        Log::info('Incoming order request', [
+            'request' => $request->all()
+        ]);
+
+        // 2️⃣ Validation
         $validated = $request->validate([
             'userId' => 'required|string',
             'UUID' => 'required|string',
@@ -28,7 +36,18 @@ class OrderController extends Controller
             'basket.*.price' => 'required|numeric',
         ]);
 
+        // 3️⃣ Validated ma'lumotni loglash
+        Log::info('Validated order data', [
+            'validated' => $validated
+        ]);
+
+        // 4️⃣ OneC ga yuborish
         $result = $this->onec->createOrder($validated);
+
+        // 5️⃣ OneC javobini loglash
+        Log::info('OneC response', [
+            'result' => $result
+        ]);
 
         return response()->json($result);
     }

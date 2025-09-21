@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Basket;
 use App\Services\OneCService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
 
 class OrderController extends Controller
 {
@@ -48,6 +50,12 @@ class OrderController extends Controller
         Log::info('OneC response', [
             'result' => $result
         ]);
+
+        // 6️⃣ Agar OneC muvaffaqiyatli bo'lsa, basketni tozalash
+
+        Basket::where('user_id', $validated['userId'])->delete();
+        Log::info('Basket cleared for user', ['user_id' => $validated['userId']]);
+
 
         return response()->json($result);
     }

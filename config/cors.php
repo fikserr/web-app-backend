@@ -13,6 +13,7 @@ return [
     'allowed_origins' => [
         'http://localhost:5173', // frontend localhost
         'https://web-app-frontend-bice.vercel.app', // production frontend
+        'https://short-bags-sell.loca.lt' // localtunnel for testing
     ],
 
     'allowed_origins_patterns' => [],
